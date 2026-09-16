@@ -41,13 +41,16 @@ jobs:
       - name: Verify Secrets Configuration
         run: |
           echo "Verifying configured repository secrets..."
+          MISSING=0
           if [ -z "${{ secrets.GMAIL_USER }}" ]; then
             echo "::error::GMAIL_USER secret is MISSING in GitHub Repository Secrets!"
+            MISSING=1
           else
             echo "✅ GMAIL_USER secret detected"
           fi
           if [ -z "${{ secrets.GMAIL_APP_PASSWORD }}" ]; then
             echo "::error::GMAIL_APP_PASSWORD secret is MISSING in GitHub Repository Secrets!"
+            MISSING=1
           else
             echo "✅ GMAIL_APP_PASSWORD secret detected"
           fi
@@ -56,6 +59,12 @@ jobs:
           else
             echo "✅ GEMINI_API_KEY secret detected"
           fi
+
+          if [ "$MISSING" -eq 1 ]; then
+            echo "❌ Missing required secrets. Please add them at: https://github.com/${{ github.repository }}/settings/secrets/actions"
+            exit 1
+          fi
+
 
       - name: Run Protein Design SOTA Agent
 
