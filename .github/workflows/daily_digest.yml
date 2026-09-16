@@ -7,8 +7,13 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab
-
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force re-send test digest (ignores duplicate filter)'
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -41,7 +46,14 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: "gemini-3.6-flash"
         run: |
-          python run_agent.py --send
+          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
+            echo "Running test run with --force..."
+            python run_agent.py --send --force
+          else
+            echo "Running standard daily scheduled run..."
+            python run_agent.py --send
+          fi
+
 
       - name: Commit updated paper history and reports
         run: |
