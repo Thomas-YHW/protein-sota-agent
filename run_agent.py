@@ -114,22 +114,28 @@ def run_pipeline(send_email: bool = False, force: bool = False, lookback: int = 
     # 5. Email Dispatch (if enabled)
     if send_email:
         print("\n📧 Dispatching email to Gmail...")
+        user_masked = f"{GMAIL_USER[:2]}***@{GMAIL_USER.split('@')[-1]}" if "@" in GMAIL_USER else "(NOT SET)"
+        print(f"  ↳ Sender: {user_masked}")
+        print(f"  ↳ App Password: {'[CONFIGURED]' if GMAIL_APP_PASSWORD else '[NOT SET]'}")
+        print(f"  ↳ Recipient: {RECIPIENT_EMAIL or user_masked}")
+
         if not GMAIL_USER or not GMAIL_APP_PASSWORD:
-            print("⚠️  Warning: Cannot send email because GMAIL_USER or GMAIL_APP_PASSWORD is not set in .env.")
-            print("👉 Please copy .env.example to .env and set your credentials.")
-            return
+            print("\n❌ CRITICAL: Cannot send email because GMAIL_USER or GMAIL_APP_PASSWORD is missing!")
+            print("👉 In GitHub: Go to Settings > Secrets and variables > Actions > Add Repository Secrets.")
+            sys.exit(1)
 
         success = send_digest_email(html_content, paper_count=len(curated_papers))
         if success:
-            # Mark papers as seen and emailed
             mark_papers_seen(curated_papers, was_emailed=True)
             print("✅ Process complete. Delivered to inbox and recorded in database.")
         else:
-            print("❌ Delivery failed. Papers were not marked as sent to allow retry.")
+            print("\n❌ CRITICAL: Email delivery failed via Gmail SMTP.")
+            sys.exit(1)
     else:
         print("\n💡 Note: Dry-run complete. No email was sent.")
         print(f"📂 You can view the generated visual digest at: {report_file}")
         print("To send directly to Gmail, run: python run_agent.py --send")
+
 
 def run_daemon(schedule_hour: int = 8, schedule_minute: int = 0):
     """

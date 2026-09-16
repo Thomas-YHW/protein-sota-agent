@@ -38,7 +38,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Verify Secrets Configuration
+        run: |
+          echo "Verifying configured repository secrets..."
+          if [ -z "${{ secrets.GMAIL_USER }}" ]; then
+            echo "::error::GMAIL_USER secret is MISSING in GitHub Repository Secrets!"
+          else
+            echo "✅ GMAIL_USER secret detected"
+          fi
+          if [ -z "${{ secrets.GMAIL_APP_PASSWORD }}" ]; then
+            echo "::error::GMAIL_APP_PASSWORD secret is MISSING in GitHub Repository Secrets!"
+          else
+            echo "✅ GMAIL_APP_PASSWORD secret detected"
+          fi
+          if [ -z "${{ secrets.GEMINI_API_KEY }}" ]; then
+            echo "::warning::GEMINI_API_KEY secret is not set (fallback heuristic will be used)"
+          else
+            echo "✅ GEMINI_API_KEY secret detected"
+          fi
+
       - name: Run Protein Design SOTA Agent
+
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
