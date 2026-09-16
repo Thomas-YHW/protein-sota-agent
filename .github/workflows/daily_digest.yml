@@ -67,7 +67,8 @@ jobs:
 
 
       - name: Run Protein Design SOTA Agent
-
+        id: run_agent
+        continue-on-error: true
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -75,13 +76,29 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: "gemini-3.6-flash"
         run: |
-          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
-            echo "Running test run with --force..."
-            python run_agent.py --send --force
+          echo "Running protein design agent..."
+          python run_agent.py --send --force 2>&1 | tee agent_run.log
+
+      - name: Publish Step Summary to GitHub Actions UI
+        if: always()
+        run: |
+          echo "## 🧬 Protein SOTA Agent Execution Log" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          if [ -f agent_run.log ]; then
+            cat agent_run.log >> $GITHUB_STEP_SUMMARY
+          elif [ -f logs/daily_agent.log ]; then
+            cat logs/daily_agent.log >> $GITHUB_STEP_SUMMARY
           else
-            echo "Running standard daily scheduled run..."
-            python run_agent.py --send
+            echo "No log found." >> $GITHUB_STEP_SUMMARY
           fi
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Check Agent Result
+        if: steps.run_agent.outcome != 'success'
+        run: |
+          echo "::error::Agent failed during execution. See execution log above in the Summary tab."
+          exit 1
+
 
 
       - name: Commit updated paper history and reports
