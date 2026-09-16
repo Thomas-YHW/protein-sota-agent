@@ -82,10 +82,13 @@ jobs:
           git add data/paper_history.db reports/
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update paper history & reports [skip ci]" && git push)
 
-      - name: Upload HTML report artifact
+      - name: Upload HTML report and logs artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: daily-html-report
-          path: reports/
+          path: |
+            reports/
+            logs/
           retention-days: 14
+

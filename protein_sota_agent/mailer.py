@@ -31,14 +31,17 @@ def send_digest_email(html_content: str, paper_count: int, recipient: Optional[s
             "Generate your 16-character Google App Password at: https://myaccount.google.com/apppasswords"
         )
 
-    to_addr = recipient or RECIPIENT_EMAIL or GMAIL_USER
+    clean_user = GMAIL_USER.strip()
+    clean_password = GMAIL_APP_PASSWORD.replace(" ", "").strip()
+    clean_to = (recipient or RECIPIENT_EMAIL or GMAIL_USER).strip()
+
     date_str = datetime.now().strftime("%b %d, %Y")
     subject = f"🧬 [Protein Design SOTA] Daily Digest - {date_str} ({paper_count} Breakthroughs)"
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"] = formataddr(("Protein Design SOTA Agent", GMAIL_USER))
-    msg["To"] = to_addr
+    msg["From"] = formataddr(("Protein Design SOTA Agent", clean_user))
+    msg["To"] = clean_to
 
     # Plain text fallback
     plain_text = (
@@ -52,24 +55,38 @@ def send_digest_email(html_content: str, paper_count: int, recipient: Optional[s
     msg.attach(part1)
     msg.attach(part2)
 
+    # Attempt 1: Port 587 with STARTTLS
     try:
-        print(f"[Mailer] Connecting to Gmail SMTP server ({GMAIL_SMTP_SERVER}:{GMAIL_SMTP_PORT})...")
-        with smtplib.SMTP(GMAIL_SMTP_SERVER, GMAIL_SMTP_PORT) as server:
+        print(f"[Mailer] Connecting to Gmail SMTP server ({GMAIL_SMTP_SERVER}:587 STARTTLS)...")
+        with smtplib.SMTP(GMAIL_SMTP_SERVER, 587, timeout=30) as server:
             server.ehlo()
             server.starttls()
             server.ehlo()
-            server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
-            server.sendmail(GMAIL_USER, [to_addr], msg.as_string())
-        print(f"[Mailer] ✅ Successfully dispatched digest to: {to_addr}")
+            server.login(clean_user, clean_password)
+            server.sendmail(clean_user, [clean_to], msg.as_string())
+        print(f"[Mailer] ✅ Successfully dispatched digest to: {clean_to}")
         return True
     except smtplib.SMTPAuthenticationError as e:
-        print(f"[Mailer] ❌ Authentication failed: {e}")
-        print("[Mailer] Tip: Ensure you are using a 16-character 'App Password', NOT your primary Google account password.")
-        print("[Mailer] Generate one at: https://myaccount.google.com/apppasswords")
-        return False
+        print(f"[Mailer] ❌ Authentication failed on port 587: {e}")
+        print("[Mailer] Tip: Check that GMAIL_APP_PASSWORD is your 16-character Google App Password.")
     except Exception as e:
-        print(f"[Mailer] ❌ Error sending email: {e}")
+        print(f"[Mailer] ⚠️ Port 587 attempt failed: {type(e).__name__}: {e}. Trying port 465 (SSL)...")
+
+    # Attempt 2: Fallback to Port 465 with SSL
+    try:
+        print(f"[Mailer] Connecting to Gmail SMTP server ({GMAIL_SMTP_SERVER}:465 SSL)...")
+        with smtplib.SMTP_SSL(GMAIL_SMTP_SERVER, 465, timeout=30) as server:
+            server.ehlo()
+            server.login(clean_user, clean_password)
+            server.sendmail(clean_user, [clean_to], msg.as_string())
+        print(f"[Mailer] ✅ Successfully dispatched digest via SSL (465) to: {clean_to}")
+        return True
+    except Exception as e:
+        import traceback
+        print(f"[Mailer] ❌ All SMTP attempts failed: {type(e).__name__}: {e}")
+        traceback.print_exc()
         return False
+
 
 def test_gmail_connection() -> bool:
     """
