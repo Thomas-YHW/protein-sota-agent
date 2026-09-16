@@ -1,0 +1,119 @@
+import urllib.request
+import urllib.parse
+import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta, timezone
+from typing import List, Dict, Any
+from protein_sota_agent.config import FETCH_LOOKBACK_DAYS, MAX_PAPERS_PER_SOURCE
+
+ARXIV_API_URL = "http://export.arxiv.org/api/query"
+
+ATOM_NS = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
+
+def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: int = MAX_PAPERS_PER_SOURCE) -> List[Dict[str, Any]]:
+    """
+    Fetch recent papers from arXiv covering protein design, inverse folding,
+    diffusion, and related structural biology computational methods.
+    """
+    # Categories: Biomolecules (q-bio.BM), AI (cs.AI), Machine Learning (cs.LG), Quantitative Methods (q-bio.QM)
+    cat_terms = ["cat:q-bio.BM", "cat:cs.AI", "cat:cs.LG", "cat:q-bio.QM"]
+    kw_terms = [
+        '"protein design"',
+        '"de novo protein"',
+        '"ProteinMPNN"',
+        '"RFdiffusion"',
+        '"antibody design"',
+        '"binder design"',
+        '"inverse folding"',
+        '"flow matching protein"',
+        '"TDP-43"',
+        '"Chai-1"',
+        '"Boltz-1"'
+    ]
+
+    cat_query = " OR ".join(cat_terms)
+    kw_query = " OR ".join([f'all:{kw}' for kw in kw_terms])
+    search_query = f"({cat_query}) AND ({kw_query})"
+
+    params = {
+        "search_query": search_query,
+        "start": 0,
+        "max_results": max_results * 2, # fetch extra to allow date filtering
+        "sortBy": "submittedDate",
+        "sortOrder": "descending"
+    }
+
+    url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": "ProteinDesignSOTABot/1.0 (mailto:protein_bot@example.com)"}
+    )
+
+    papers = []
+    try:
+        with urllib.request.urlopen(req, timeout=25) as response:
+            xml_data = response.read()
+
+        root = ET.fromstring(xml_data)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=lookback_days)
+
+        for entry in root.findall("atom:entry", ATOM_NS):
+            title = entry.findtext("atom:title", namespaces=ATOM_NS) or ""
+            title = " ".join(title.strip().split())
+
+            raw_id = entry.findtext("atom:id", namespaces=ATOM_NS) or ""
+            # Extract clean arXiv ID e.g. 2405.12345v1
+            arxiv_id = raw_id.split("/abs/")[-1] if "/abs/" in raw_id else raw_id
+
+            summary = entry.findtext("atom:summary", namespaces=ATOM_NS) or ""
+            summary = " ".join(summary.strip().split())
+
+            published_str = entry.findtext("atom:published", namespaces=ATOM_NS) or ""
+            try:
+                # ISO 8601 parsing e.g. 2026-05-12T14:00:00Z
+                pub_dt = datetime.fromisoformat(published_str.replace("Z", "+00:00"))
+            except Exception:
+                pub_dt = datetime.now(timezone.utc)
+
+            # Check cutoff
+            if pub_dt < cutoff_date:
+                continue
+
+            # Authors
+            authors = []
+            for author_el in entry.findall("atom:author", ATOM_NS):
+                name = author_el.findtext("atom:name", namespaces=ATOM_NS)
+                if name:
+                    authors.append(name.strip())
+
+            # Links
+            abs_url = f"https://arxiv.org/abs/{arxiv_id}"
+            pdf_url = f"https://arxiv.org/pdf/{arxiv_id}.pdf"
+            for link in entry.findall("atom:link", ATOM_NS):
+                if link.attrib.get("title") == "pdf":
+                    pdf_url = link.attrib.get("href", pdf_url)
+
+            # Categories
+            primary_cat_el = entry.find("arxiv:primary_category", ATOM_NS)
+            primary_cat = primary_cat_el.attrib.get("term", "q-bio.BM") if primary_cat_el is not None else "q-bio.BM"
+
+            papers.append({
+                "id": f"arxiv_{arxiv_id}",
+                "raw_id": arxiv_id,
+                "title": title,
+                "abstract": summary,
+                "authors": authors[:5], # top authors
+                "published_date": pub_dt.strftime("%Y-%m-%d"),
+                "url": abs_url,
+                "pdf_url": pdf_url,
+                "source": "arXiv",
+                "category": primary_cat
+            })
+
+            if len(papers) >= max_results:
+                break
+
+    except Exception as e:
+        print(f"[arXiv Fetcher] Warning: Failed to fetch from arXiv: {e}")
+
+    return papers
+
