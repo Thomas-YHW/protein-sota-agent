@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein Design SOTA Digest - September 19, 2026</title>
+  <style>
+    /* Client-safe resets */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100% !important;
+      background-color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 16px;
+      padding: 32px 28px;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      margin-bottom: 24px;
+    }
+    .header-badge {
+      display: inline-block;
+      background-color: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(165, 180, 252, 0.4);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    .header-title {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-sub {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .stats-bar {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .stats-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* Executive Summary Card */
+    .exec-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .exec-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+    }
+    .exec-text {
+      font-size: 14px;
+      color: #334155;
+      margin: 0 0 16px 0;
+      line-height: 1.65;
+    }
+    .trend-pill {
+      display: inline-block;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Paper Card */
+    .paper-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .spotlight {
+      border: 2px solid #818cf8;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    }
+    .badge-row {
+      margin-bottom: 12px;
+    }
+    .cat-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-right: 6px;
+    }
+    .source-badge {
+      display: inline-block;
+      background-color: #f1f5f9;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .score-badge {
+      float: right;
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+    }
+    .paper-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+    .paper-title a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .paper-title a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    .paper-meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+    .key-points {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .point-item {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .point-item:last-child {
+      margin-bottom: 0;
+    }
+    .point-label {
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .action-row {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-right: 8px;
+    }
+    .btn-primary {
+      background-color: #4f46e5;
+      color: #ffffff !important;
+    }
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .footer a {
+      color: #64748b;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-badge">🧬 SOTA RESEARCH AGENT</div>
+      <h1 class="header-title">Protein Design Daily Briefing</h1>
+      <p class="header-sub">Automated literature surveillance across arXiv, bioRxiv & PubMed</p>
+      <div class="stats-bar">
+        📅 <strong>September 19, 2026</strong> &nbsp;|&nbsp; 
+        📄 <span class="stats-highlight">8 Curated Breakthroughs</span> &nbsp;|&nbsp;
+        🎯 Focus: <em>De Novo, MPNN, Diffusion, IDRs & Binders</em>
+      </div>
+    </div>
+
+    <!-- Executive Summary -->
+    
+    <div class="exec-card">
+      <h2 class="exec-title">⚡ Today's State of the Art Snapshot</h2>
+      <p class="exec-text">Today's literature digest captured 8 high-relevance papers in protein engineering, with significant activity in Antibodies & Targeted Binders. Key highlights include advances in generative model architectures, efficient inverse-folding adaptations, and structural characterizations of biomolecular assemblies.</p>
+      
+      <div style="margin-top: 12px;">
+        <strong style="font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Key Emerging Trends:</strong>
+        
+        <span class="trend-pill">✦ Dominant activity in Antibodies & Targeted Binders</span>
+        
+        <span class="trend-pill">✦ Expansion of multimodal generative protein frameworks</span>
+        
+      </div>
+      
+    </div>
+    
+
+    <!-- Paper Stream -->
+    
+    <div class="paper-card spotlight">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">bioRxiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://doi.org/10.1101/2025.08.18.670751" target="_blank">De Novo Design of Miniprotein Inhibitors of Bacterial Adhesins</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Chazin-Gray, A. M., Thompson, T. R., Lopatto, E. D. B., Magala, P., Erickson, P. W. &nbsp;•&nbsp; 
+        🗓️ 2026-09-16
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> The rise of multidrug-resistant bacterial infections necessitates the discovery of novel antimicrobial strategies
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Here, we show that protein design provides a generalizable means of generating new antimicrobials by neutralizing the function of bacterial adhesins, which are virulence factors critical in host-pathogen interactions
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> The designed antagonists have high specificity and stability, disrupt bacterial recognition of host receptors, block biofilm formation, and are effective in treating and preventing murine models of uncomplicated and catheter- associated UTIs in vivo.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://doi.org/10.1101/2025.08.18.670751" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://www.biorxiv.org/content/10.1101/2025.08.18.670751.full.pdf" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42665538/" target="_blank">DyAb: sequence-based antibody design and property prediction in a low-data regime</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Lin JY, Hofmann JL, Leaver-Fay A, Liang WC, Vasilaki S &nbsp;•&nbsp; 
+        🗓️ 2026 Dec 31
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in MAbs (2026 Dec 31)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1080/19420862.2026.2717460
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42665538/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2717460" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42482306/" target="_blank">Glycosylation penetrance of N-X-S/T sequons in antibody variable domains: a structural survey of 19,265 human antibody structures reassessing the histidine/glutamine suppression hypothesis</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Gaughan CL &nbsp;•&nbsp; 
+        🗓️ 2026 Dec 31
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in MAbs (2026 Dec 31)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1080/19420862.2026.2703349
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42482306/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2703349" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41797001/" target="_blank">NAStructuralDB : structural database to facilitate computational studies of molecular modeling and recognition of proteins with special focus on antibody-antigen interactions</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Chomicz D, Dudzic P, Wrobel S, Gawlowski T, Demharter S &nbsp;•&nbsp; 
+        🗓️ 2026 Dec 31
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in MAbs (2026 Dec 31)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1080/19420862.2026.2630438
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41797001/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2630438" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41684328/" target="_blank">Balancing the extremes for antibody developability: hydrophobic and electrostatic germline framework signatures for CDR-loop compensation</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Spanke VA, Egger-Hoerschinger VJ, Seidler CA, Kroell KB, Wieser V &nbsp;•&nbsp; 
+        🗓️ 2026 Dec 31
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in MAbs (2026 Dec 31)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1080/19420862.2026.2627669
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41684328/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2627669" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41689452/" target="_blank">ASD: antigen-specific antibody database</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Czerwiński A, Dudzic P, Wójtowicz K, Jaszczyszyn I, Bielska W &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in MAbs (2026 Dec)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1080/19420862.2026.2623330
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41689452/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2623330" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42468751/" target="_blank">Small details, great impacts: Controlled antibody anchoring for enhanced immunoassays</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Liu Z, Yang J, Xiong Z, Xiao S, Liu Y &nbsp;•&nbsp; 
+        🗓️ 2026 Nov
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in Biotechnol Adv (2026 Nov)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1016/j.biotechadv.2026.108984
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42468751/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.biotechadv.2026.108984" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Binders / Antibodies</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">Conformational Dynamics & IDRs</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42418847/" target="_blank">Phase separation and protein aggregation in neurodegenerative diseases</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ de La Seiglière H, Letourneur Æ, Ichas F, De Giorgi F &nbsp;•&nbsp; 
+        🗓️ 2026 Nov
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Peer-reviewed study published in Biophys Chem (2026 Nov)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DOI: 10.1016/j.bpc.2026.107678
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Advances in computational structural biology and protein engineering.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42418847/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.bpc.2026.107678" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Dynamics</span>
+        
+      </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This automated digest was generated by your <strong>Protein Design SOTA Agent</strong>.</p>
+      <p>Target domains: <em>De Novo Diffusion, ProteinMPNN, TDP-43 / IDRs, Targeted Binders & AlphaFold/Boltz</em></p>
+      <p style="font-size: 11px; color: #cbd5e1; margin-top: 12px;">Saved locally at <code>/home/runner/work/protein-sota-agent/protein-sota-agent/reports/digest_2026-09-19.html</code></p>
+    </div>
+  </div>
+</body>
+</html>
