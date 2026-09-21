@@ -119,6 +119,10 @@ def fetch_biorxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: 
 
             authors_str = item.get("authors", "")
             authors = [a.strip() for a in authors_str.split(";") if a.strip()][:5]
+            authors = [a.strip() for a in authors_str.split(";") if a.strip()][:8]
+
+            inst = item.get("author_corresponding_institution") or item.get("institution") or ""
+            affiliations = [inst.strip()] if inst and inst.strip() else []
 
             papers.append({
                 "id": paper_id,
@@ -126,6 +130,8 @@ def fetch_biorxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: 
                 "title": title,
                 "abstract": abstract,
                 "authors": authors,
+                "affiliations": affiliations,
+                "journal": "bioRxiv",
                 "published_date": item.get("date", today.strftime("%Y-%m-%d")),
                 "url": f"https://doi.org/{doi}" if doi else item.get("biorxiv_url", ""),
                 "pdf_url": f"https://www.biorxiv.org/content/{doi}.full.pdf" if doi else "",

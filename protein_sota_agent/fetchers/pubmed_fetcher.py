@@ -80,20 +80,29 @@ def fetch_pubmed_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: i
                         doi = aid.text.strip()
                         break
 
-                # Authors
+                # Authors & Affiliations
                 authors = []
+                affiliations = []
                 for a in article.findall(".//Author"):
                     lname = a.findtext("LastName") or ""
                     fname = a.findtext("ForeName") or a.findtext("Initials") or ""
                     if lname:
                         authors.append(f"{lname} {fname}".strip())
+                    for aff_el in a.findall(".//Affiliation"):
+                        if aff_el.text and aff_el.text.strip():
+                            affiliations.append(aff_el.text.strip())
+
+                # Unique affiliations
+                unique_affiliations = list(dict.fromkeys(affiliations))[:6]
 
                 papers.append({
                     "id": f"pubmed_{pmid}",
                     "raw_id": pmid,
                     "title": title,
                     "abstract": abstract,
-                    "authors": authors[:5],
+                    "authors": authors[:8],
+                    "affiliations": unique_affiliations,
+                    "journal": journal,
                     "published_date": pub_date,
                     "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
                     "pdf_url": f"https://doi.org/{doi}" if doi else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",

@@ -100,11 +100,21 @@ def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: in
                 continue
 
             # Authors
+            # Authors & Affiliations
             authors = []
+            affiliations = []
             for author_el in entry.findall("atom:author", ATOM_NS):
                 name = author_el.findtext("atom:name", namespaces=ATOM_NS)
                 if name:
                     authors.append(name.strip())
+                aff_text = author_el.findtext("arxiv:affiliation", namespaces={"arxiv": "http://arxiv.org/schemas/atom"})
+                if aff_text and aff_text.strip():
+                    affiliations.append(aff_text.strip())
+
+            # Journal Ref or Comments (e.g. accepted at NeurIPS / Nature)
+            journal_ref = entry.findtext("arxiv:journal_ref", namespaces={"arxiv": "http://arxiv.org/schemas/atom"}) or ""
+            comment = entry.findtext("arxiv:comment", namespaces={"arxiv": "http://arxiv.org/schemas/atom"}) or ""
+            journal = journal_ref.strip() if journal_ref else ("arXiv" + (f" ({comment.strip()})" if any(c in comment.lower() for c in ["neurips", "icml", "iclr", "cvpr", "nature", "science", "accepted"]) else ""))
 
             # Links
             abs_url = f"https://arxiv.org/abs/{arxiv_id}"
@@ -123,6 +133,9 @@ def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: in
                 "title": title,
                 "abstract": summary,
                 "authors": authors[:5], # top authors
+                "authors": authors[:8], # top authors
+                "affiliations": list(dict.fromkeys(affiliations))[:6],
+                "journal": journal,
                 "published_date": pub_dt.strftime("%Y-%m-%d"),
                 "url": abs_url,
                 "pdf_url": pdf_url,
