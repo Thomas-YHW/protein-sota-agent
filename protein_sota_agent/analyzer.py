@@ -12,8 +12,9 @@ from protein_sota_agent.config import (
 CATEGORIES = [
     "De Novo Generation & Diffusion",
     "Inverse Folding & Sequence Design",
+    "Protein Language Models & Embeddings",
     "Antibodies & Targeted Binders",
-    "Conformational Dynamics & IDRs",
+    "IDRs, Phase Separation & Low-Complexity Regions",
     "Structure & Complex Prediction",
     "Therapeutics & Enzyme Engineering"
 ]
@@ -33,12 +34,16 @@ def fallback_heuristic_analyzer(papers: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Heuristic scoring
         if any(w in text for w in ["rfdiffusion", "proteinmpnn", "flow matching", "de novo design", "de novo protein"]):
             score += 3
+        if any(w in text for w in ["phase separation", "llps", "condensate", "coacervat"]):
+            score += 3
+        if any(w in text for w in ["tdp-43", "intrinsically disordered", "idr", "low complexity", "lcr", "conformational ensemble"]):
+            score += 3
+        if any(w in text for w in ["protein language model", "plm", "esm-2", "esm3", "progen", "saprot", "representation learning"]):
+            score += 3
         if any(w in text for w in ["antibody", "nanobody", "binder design", "target binding"]):
             score += 2
-        if any(w in text for w in ["tdp-43", "intrinsically disordered", "idr", "phase separation", "condensate"]):
+        if any(w in text for w in ["alphafold", "chai-1", "boltz-1", "rosetta", "deep learning", "machine learning"]):
             score += 2
-        if any(w in text for w in ["alphafold", "esm3", "chai-1", "boltz-1", "rosetta"]):
-            score += 1
         if any(w in text for w in ["experimental validation", "cryo-em", "spr", "crystallography", "in vitro"]):
             score += 1
 
@@ -47,15 +52,21 @@ def fallback_heuristic_analyzer(papers: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Categorize
         cat = "De Novo Generation & Diffusion"
         tag = "Generative AI"
-        if any(w in text for w in ["proteinmpnn", "ligandmpnn", "inverse folding", "sequence design"]):
+        if any(w in text for w in ["protein language model", "plm", "esm-2", "esm3", "progen", "saprot", "representation learning", "sequence embedding"]):
+            cat = "Protein Language Models & Embeddings"
+            tag = "pLM / Embeddings"
+        elif any(w in text for w in ["proteinmpnn", "ligandmpnn", "inverse folding", "sequence design"]):
             cat = "Inverse Folding & Sequence Design"
             tag = "MPNN / Sequence"
         elif any(w in text for w in ["antibody", "nanobody", "antigen", "cdr", "binder"]):
             cat = "Antibodies & Targeted Binders"
             tag = "Binders / Antibodies"
-        elif any(w in text for w in ["tdp-43", "idr", "intrinsically disordered", "disorder", "condensate", "phase separation"]):
-            cat = "Conformational Dynamics & IDRs"
-            tag = "IDRs / Dynamics"
+        elif any(w in text for w in ["phase separation", "liquid-liquid phase separation", "llps", "condensate", "biomolecular condensate", "coacervation"]):
+            cat = "IDRs, Phase Separation & Low-Complexity Regions"
+            tag = "Phase Separation / LLPS"
+        elif any(w in text for w in ["tdp-43", "idr", "intrinsically disordered", "disorder", "low complexity", "lcr", "prion", "conformational ensemble"]):
+            cat = "IDRs, Phase Separation & Low-Complexity Regions"
+            tag = "IDRs / Low-Complexity"
         elif any(w in text for w in ["alphafold", "chai-1", "boltz-1", "esmfold", "complex prediction"]):
             cat = "Structure & Complex Prediction"
             tag = "Structure Prediction"
@@ -135,23 +146,27 @@ def analyze_papers_with_gemini(papers: List[Dict[str, Any]]) -> Dict[str, Any]:
 
         prompt = f"""
 You are an expert computational structural biologist and AI protein design scientist specializing in:
+- Protein language models (pLMs) & representation learning (ESM-2, ESM3, ProGen, SaProt, Ankh) for zero-shot variant effect prediction, fitness landscapes, and generative sequence modeling
+- Intrinsically disordered regions (IDRs), low-complexity regions (LCRs/LCDs), prion-like domains, and conformational ensembles
+- Liquid-liquid phase separation (LLPS), biomolecular condensates, and coacervation thermodynamics
+- AI & deep learning models for IDRs, conformational sampling, and LLPS prediction (e.g. FuzDrop, DeePhase, Metapredict, CALVADOS)
 - De novo protein design & generative diffusion / flow matching (RFdiffusion, Chroma)
 - Sequence design & inverse folding (ProteinMPNN, LigandMPNN, ESM-IF1)
-- Intrinsically disordered regions (IDRs), liquid-liquid phase separation, RNA-binding proteins like TDP-43
-- Target binder / antibody / nanobody design
+- Targeted binders and aggregation-capping inhibitors for amyloid/IDR disease targets like TDP-43 and FUS
 - Structure & complex prediction (AlphaFold3, Chai-1, Boltz-1, ESM3)
 
 Evaluate the following {len(papers_payload)} research papers.
 For EACH paper:
-1. Assign a `relevance_score` from 1 to 10 (10 = groundbreaking SOTA method in protein design/engineering; < 6 = irrelevant or off-topic).
+1. Assign a `relevance_score` from 1 to 10 (10 = groundbreaking SOTA method in protein design, pLMs, IDRs, or phase separation; < 6 = irrelevant or off-topic).
 2. Assign one of these canonical categories:
    - "De Novo Generation & Diffusion"
    - "Inverse Folding & Sequence Design"
+   - "Protein Language Models & Embeddings"
    - "Antibodies & Targeted Binders"
-   - "Conformational Dynamics & IDRs"
+   - "IDRs, Phase Separation & Low-Complexity Regions"
    - "Structure & Complex Prediction"
    - "Therapeutics & Enzyme Engineering"
-3. Assign a short punchy `tag` (e.g. "Diffusion", "ProteinMPNN", "TDP-43 / IDR", "Antibody", "AF3 / Boltz").
+3. Assign a short punchy `tag` (e.g. "pLM / Embeddings", "Phase Separation", "IDRs / Low-Complexity", "Diffusion", "ProteinMPNN", "TDP-43 Capping", "Antibody", "AF3 / Boltz").
 4. Formulate:
    - `headline`: A clear, scientific 1-line headline summarizing what was accomplished.
    - `the_problem`: 1-2 sentences on what bottleneck or challenge existed.
@@ -184,8 +199,8 @@ Return ONLY valid JSON in this exact structure:
 
         import requests
 
-        models_to_try = [GEMINI_MODEL, "gemini-3.6-flash"]
-        models_to_try = list(dict.fromkeys(models_to_try))
+        models_to_try = [GEMINI_MODEL, "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash", "gemini-3.6-flash"]
+        models_to_try = [m for m in dict.fromkeys(models_to_try) if m]
 
         output_json = None
         last_err = None

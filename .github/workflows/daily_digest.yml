@@ -76,6 +76,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: "gemini-3.6-flash"
         run: |
+          set -o pipefail
           echo "Running protein design agent..."
           python run_agent.py --send --force 2>&1 | tee agent_run.log
 

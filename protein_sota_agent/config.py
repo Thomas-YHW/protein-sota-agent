@@ -25,9 +25,8 @@ DB_PATH = DATA_DIR / "paper_history.db"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Domain Focus & Search Queries
-# Specifically tailored for protein design, inverse folding, diffusion, IDRs, and binders
 DEFAULT_KEYWORDS = [
+    # 1. Computational Protein Design & Generative AI
     "protein design",
     "de novo protein",
     "ProteinMPNN",
@@ -37,12 +36,54 @@ DEFAULT_KEYWORDS = [
     "antibody design",
     "binder design",
     "inverse folding",
-    "intrinsically disordered",
-    "TDP-43",
     "AlphaFold",
-    "ESM3",
     "Chai-1",
-    "Boltz-1"
+    "Boltz-1",
+    
+    # 2. Protein Language Models (pLMs) & Representation Learning
+    "protein language model",
+    "protein language models",
+    "pLM",
+    "pLMs",
+    "ESM-2",
+    "ESM3",
+    "ProGen",
+    "SaProt",
+    "Ankh",
+    
+    # 3. Intrinsically Disordered Regions (IDRs) & Low-Complexity Regions (LCRs/LCDs)
+    "intrinsically disordered",
+    "intrinsically disordered protein",
+    "intrinsically disordered region",
+    "protein disorder",
+    "conformational ensemble",
+    "conformational dynamics",
+    "fuzzy complex",
+    "low complexity region",
+    "low complexity regions",
+    "low complexity domain",
+    "low-complexity domain",
+    "low-complexity region",
+    "LCR",
+    "LCD",
+    "prion-like domain",
+    "PrLD",
+    
+    # 4. Liquid-Liquid Phase Separation (LLPS) & Biomolecular Condensates
+    "phase separation",
+    "liquid-liquid phase separation",
+    "LLPS",
+    "biomolecular condensate",
+    "biomolecular condensates",
+    "membraneless organelle",
+    "protein condensation",
+    "coacervation",
+    "coacervate",
+    
+    # 5. Target Disease IDR & Prion-like Proteins
+    "TDP-43",
+    "FUS",
+    "hnRNPA1"
 ]
 
 # Fetching Parameters

@@ -15,6 +15,7 @@ RELEVANT_CATEGORIES = {
 }
 
 KEYWORDS = [
+    # Protein Design & Generative Modeling
     "protein design",
     "de novo protein",
     "proteinmpnn",
@@ -23,14 +24,54 @@ KEYWORDS = [
     "flow matching",
     "inverse folding",
     "antibody design",
+    "nanobody design",
     "binder design",
     "alphafold",
     "esm3",
     "chai-1",
     "boltz-1",
-    "tdp-43",
+    "structural biology",
+    # Protein Language Models & Foundation Models
+    "protein language model",
+    "protein language models",
+    "plm",
+    "plms",
+    "esm-2",
+    "esm3",
+    "progen",
+    "saprot",
+    "ankh",
+    # Intrinsically Disordered Proteins, Low Complexity Regions & Ensembles
     "intrinsically disordered",
-    "structural biology"
+    "disordered protein",
+    "disordered region",
+    "conformational ensemble",
+    "conformational dynamics",
+    "fuzzy complex",
+    "low complexity domain",
+    "low complexity region",
+    "low-complexity domain",
+    "low-complexity region",
+    "lcr",
+    "lcd",
+    "prion-like domain",
+    "prld",
+    "idr",
+    "idps",
+    # Phase Separation & Condensates
+    "phase separation",
+    "liquid-liquid phase separation",
+    "llps",
+    "biomolecular condensate",
+    "biomolecular condensates",
+    "membraneless organelle",
+    "protein condensation",
+    "coacervation",
+    "coacervate",
+    # Disease Targets
+    "tdp-43",
+    "fus protein",
+    "hnrnpa1"
 ]
 
 def fetch_biorxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: int = MAX_PAPERS_PER_SOURCE) -> List[Dict[str, Any]]:
@@ -64,7 +105,12 @@ def fetch_biorxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: 
 
             if not (is_relevant_category and matches_keyword):
                 # Also allow if strongly matches specific design keywords even if category is general
-                strong_kw = ["protein design", "de novo", "proteinmpnn", "rfdiffusion", "antibody design", "inverse folding", "tdp-43"]
+                strong_kw = [
+                    "protein design", "de novo", "proteinmpnn", "rfdiffusion", "antibody design",
+                    "inverse folding", "tdp-43", "phase separation", "liquid-liquid phase separation",
+                    "llps", "biomolecular condensate", "intrinsically disordered", "conformational ensemble",
+                    "protein language model", "low complexity domain", "low complexity region"
+                ]
                 if not any(skw in text_to_check for skw in strong_kw):
                     continue
 

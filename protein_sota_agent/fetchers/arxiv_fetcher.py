@@ -1,11 +1,10 @@
-import urllib.request
-import urllib.parse
+import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any
 from protein_sota_agent.config import FETCH_LOOKBACK_DAYS, MAX_PAPERS_PER_SOURCE
 
-ARXIV_API_URL = "http://export.arxiv.org/api/query"
+ARXIV_API_URL = "https://export.arxiv.org/api/query"
 
 ATOM_NS = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
 
@@ -17,6 +16,7 @@ def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: in
     # Categories: Biomolecules (q-bio.BM), AI (cs.AI), Machine Learning (cs.LG), Quantitative Methods (q-bio.QM)
     cat_terms = ["cat:q-bio.BM", "cat:cs.AI", "cat:cs.LG", "cat:q-bio.QM"]
     kw_terms = [
+        # Protein design & foundation AI
         '"protein design"',
         '"de novo protein"',
         '"ProteinMPNN"',
@@ -25,9 +25,29 @@ def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: in
         '"binder design"',
         '"inverse folding"',
         '"flow matching protein"',
-        '"TDP-43"',
+        '"AlphaFold"',
         '"Chai-1"',
-        '"Boltz-1"'
+        '"Boltz-1"',
+        # Protein Language Models (pLMs)
+        '"protein language model"',
+        '"protein language models"',
+        '"ESM-2"',
+        '"ESM3"',
+        '"pLM"',
+        # Intrinsically disordered proteins, low-complexity regions & conformational ensembles
+        '"intrinsically disordered"',
+        '"protein disorder"',
+        '"conformational ensemble"',
+        '"fuzzy complex"',
+        '"low complexity domain"',
+        '"low complexity region"',
+        '"prion-like domain"',
+        # Liquid-liquid phase separation & biomolecular condensates
+        '"phase separation"',
+        '"liquid-liquid phase separation"',
+        '"biomolecular condensate"',
+        '"biomolecular condensates"',
+        '"TDP-43"'
     ]
 
     cat_query = " OR ".join(cat_terms)
@@ -42,17 +62,18 @@ def fetch_arxiv_papers(lookback_days: int = FETCH_LOOKBACK_DAYS, max_results: in
         "sortOrder": "descending"
     }
 
-    url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
-    req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "ProteinDesignSOTABot/1.0 (mailto:protein_bot@example.com)"}
-    )
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
 
     papers = []
     try:
-        with urllib.request.urlopen(req, timeout=25) as response:
-            xml_data = response.read()
+        response = requests.get(ARXIV_API_URL, params=params, headers=headers, timeout=25)
+        if response.status_code != 200:
+            print(f"[arXiv Fetcher] Warning: Failed to fetch from arXiv: HTTP {response.status_code}")
+            return []
 
+        xml_data = response.content
         root = ET.fromstring(xml_data)
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=lookback_days)
 

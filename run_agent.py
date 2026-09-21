@@ -49,6 +49,7 @@ from protein_sota_agent.config import (
     REPORTS_DIR,
     GMAIL_USER,
     GMAIL_APP_PASSWORD,
+    RECIPIENT_EMAIL,
     GEMINI_API_KEY
 )
 from protein_sota_agent.storage import is_paper_seen, mark_papers_seen, get_history_stats
