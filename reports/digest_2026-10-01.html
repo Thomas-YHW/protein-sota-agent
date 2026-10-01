@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein Design SOTA Digest - October 01, 2026</title>
+  <style>
+    /* Client-safe resets */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100% !important;
+      background-color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 16px;
+      padding: 32px 28px;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      margin-bottom: 24px;
+    }
+    .header-badge {
+      display: inline-block;
+      background-color: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(165, 180, 252, 0.4);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    .header-title {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-sub {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .stats-bar {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .stats-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* Executive Summary Card */
+    .exec-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .exec-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+    }
+    .exec-text {
+      font-size: 14px;
+      color: #334155;
+      margin: 0 0 16px 0;
+      line-height: 1.65;
+    }
+    .trend-pill {
+      display: inline-block;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Paper Card */
+    .paper-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .spotlight {
+      border: 2px solid #818cf8;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    }
+    .badge-row {
+      margin-bottom: 12px;
+    }
+    .cat-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-right: 6px;
+    }
+    .source-badge {
+      display: inline-block;
+      background-color: #f1f5f9;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .score-badge {
+      float: right;
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+    }
+    .paper-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+    .paper-title a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .paper-title a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    .paper-meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+    .key-points {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .point-item {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .point-item:last-child {
+      margin-bottom: 0;
+    }
+    .point-label {
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .action-row {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-right: 8px;
+    }
+    .btn-primary {
+      background-color: #4f46e5;
+      color: #ffffff !important;
+    }
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .footer a {
+      color: #64748b;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-badge">🧬 SOTA RESEARCH AGENT</div>
+      <h1 class="header-title">Protein Design Daily Briefing</h1>
+      <p class="header-sub">Automated literature surveillance across arXiv, bioRxiv & PubMed</p>
+      <div class="stats-bar">
+        📅 <strong>October 01, 2026</strong> &nbsp;|&nbsp; 
+        📄 <span class="stats-highlight">12 Curated Breakthroughs</span> &nbsp;|&nbsp;
+        🎯 Focus: <em>De Novo, MPNN, Diffusion, IDRs & Binders</em>
+      </div>
+    </div>
+
+    <!-- Executive Summary -->
+    
+    <div class="exec-card">
+      <h2 class="exec-title">⚡ Today's State of the Art Snapshot</h2>
+      <p class="exec-text">Today's research highlights a major paradigm shift in computational protein design, characterized by the integration of multimodal representations and the transition from simple affinity optimization to holistic, multi-objective developability engineering. A key theme is the maturation of antibody design methodologies. Rather than relying solely on sequence-based protein language models (pLMs), state-of-the-art frameworks are now fusing pLM embeddings with 3D structural graphs (e.g., AlphaFold-predicted structures) to capture spatial proximity and predict complex biophysical liabilities such as self-association, non-specificity, and viscosity. Furthermore, the introduction of structural tokenizers like Igloo represents a significant step forward in bridging the gap between discrete sequence space and continuous 3D conformational space, enabling autoregressive models to co-design antibody loops with high precision.
+
+Simultaneously, the field of biomolecular condensates and intrinsically disordered regions (IDRs) is transitioning from observational characterization to active de novo design. Researchers are successfully deploying generative AI to design short, non-redundant, phase-separating peptide elements, overcoming the expression and redundancy limitations of native IDRs. This enables the precise engineering of synthetic membraneless organelles for prokaryotic systems. Together, these papers demonstrate that combining deep learning, structural biophysics, and high-throughput experimental validation is unlocking the ability to design highly functional, developable therapeutics and biomaterials with tailored phase behaviors.</p>
+      
+      <div style="margin-top: 12px;">
+        <strong style="font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Key Emerging Trends:</strong>
+        
+        <span class="trend-pill">✦ Multimodal Sequence-Structure Fusion: Integrating pLM embeddings (like ESM-2) with 3D residue graphs to predict complex developability liabilities such as self-association and non-specific binding.</span>
+        
+        <span class="trend-pill">✦ Discrete Structural Tokenization: The rise of contrastive-learning-based tokenizers (e.g., Igloo) that discretize continuous 3D backbone conformations, allowing language models to directly generate structurally viable loops.</span>
+        
+        <span class="trend-pill">✦ De Novo Condensate Engineering: Moving beyond natural IDRs to design short, non-redundant, phase-separating peptides using generative AI for synthetic biology and metabolic compartmentalization.</span>
+        
+        <span class="trend-pill">✦ Data-Scarce Optimization: Leveraging pairwise representations and transfer learning to achieve high-accuracy property prediction and affinity maturation with minimal experimental training data.</span>
+        
+      </div>
+      
+    </div>
+    
+
+    <!-- Paper Stream -->
+    
+    <div class="paper-card spotlight">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.5/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" target="_blank">Engineering short-sequence elements for condensate-like assemblies by de novo design</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Zhang Di, Zhang Binyun, Zheng Cheng, Sun Wenjun, Niu Huanqing, Zhu Chenjie, Chen Yong, Liu Dong &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Native phase-separating proteins are often large, highly redundant, and difficult to express or control in prokaryotic synthetic biology systems.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> The authors established an integrated framework combining generative AI, computational prediction, and experimental validation to design short, non-redundant, de novo phase-separating peptides.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Enables the precise, rational engineering of synthetic membraneless organelles and metabolic compartments in prokaryotes using minimal sequence space.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.synbio.2026.06.007" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#De Novo LLPS Design</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.5/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41936024/" target="_blank">Tokenizing loops of antibodies</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Fang Ada, Alberstein Robert G, Kelow Simon, Dreyer Frédéric A &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Traditional CDR loop classification methods have limited structural coverage and cannot be easily integrated into autoregressive protein language models.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> The authors introduced Igloo, a contrastive-learning-based tokenizer that maps loop sequence and backbone dihedrals to discrete tokens, outperforming existing methods in structural retrieval and loop generation.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Enables seamless integration of 3D structural loop constraints into generative protein language models (IglooLM) for precise, structure-aware antibody design.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41936024/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2645271" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Loop Tokenizer</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.2/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42420197/" target="_blank">Predicting antibody self-association with sequence-structure fusion models: the central role of CSI-BLI in early developability screening</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Ahmed Shafayat, Devalle Federico, Leisen Lauren, Pham Tony, Amofah Bismark, Lee Amber, Hutchinson Mark, Chakiath Chacko &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Antibody self-association leads to high viscosity and rapid clearance, but predicting these properties from sequence alone is highly challenging.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> The authors developed a sequence-structure fusion model that couples fine-tuned ESM-2 embeddings with AlphaFold-predicted 3D residue graphs using a multi-stream attention mechanism.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Allows robust, early-stage in silico screening of antibody self-association and viscosity, significantly reducing developability risks before wet-lab scale-up.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42420197/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2694124" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Sequence-Structure Fusion</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42665538/" target="_blank">DyAb: sequence-based antibody design and property prediction in a low-data regime</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Lin Joshua Yao-Yu, Hofmann Jennifer L, Leaver-Fay Andrew, Liang Wei-Ching, Vasilaki Stefania, Lee Edith, O Pinheiro Pedro, Tagasovska Natasa &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Early-stage antibody optimization is frequently bottlenecked by a lack of large-scale binding affinity data.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> DyAb leverages a pre-trained protein language model with a pairwise representation to predict relative differences in binding affinity, achieving a Spearman correlation of 0.85 with as few as 100 training points.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Enables rapid, data-efficient antibody affinity maturation and optimization, delivering over ten-fold affinity improvements in low-data settings.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42665538/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2717460" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Design</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42200306/" target="_blank">Prediction of antibody non-specificity using protein language models and biophysical parameters</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Sakhnini Laila I, Beltrame Ludovica, Fulle Simone, Sormanni Pietro, Henriksen Anette, Lorenzen Nikolai, Vendruscolo Michele, Granata Daniele &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Non-specific binding is a major developability hurdle in antibody therapeutics, but identifying its sequence-level determinants is difficult.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> This study benchmarked ESM-2 embeddings against interpretable biophysical descriptors, demonstrating that non-specificity is dominated by heavy-chain features, particularly H-CDR3.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Provides a dual-pathway (interpretable biophysical + deep learning) screening tool to eliminate polyspecific antibody candidates early in the design pipeline.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42200306/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2678000" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody PLMs</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41860336/" target="_blank">Application of protein language models for antibody developability prediction</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Amini Samad, Huang Yimin, Julian Mark, Palmer Christina, Sciabola Simone, Wang Ye &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> The performance and reliability of zero-shot PLM representations in real-world, industrial antibody developability pipelines remain underexplored.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Using historical data from 33 therapeutic programs, the authors demonstrated that domain-adaptive fine-tuning of PLMs consistently outperforms pretrained representations across PSR, HIC, and AC-SINS assays.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Establishes a validated protocol for integrating fine-tuned PLMs into industrial pipelines to predict and mitigate antibody developability risks.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41860336/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2647489" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Developability</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42556189/" target="_blank">Length-encoded phase transitions in proline-alanine-serine peptides: from nanoaggregates to condensates</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Garay-Perez Hilda, Savioli Marco, Petrella Greta, de la Caridad Murillo Fernández Dhayme, Hernández Yanet Támbara, Abad Matilde Lopez, Ferrara Annachiara, Quattrociocchi Miriam &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> PAS-based polypeptides are widely used to improve drug solubility, but their length-dependent aggregation and phase separation behaviors were poorly understood.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Using NMR, FRAP, and molecular dynamics, the authors mapped the phase diagram of PAS peptides, showing that while short chains form nanoaggregates, longer PAS80 chains undergo true liquid-liquid phase separation.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Provides biophysical design rules for using disordered PAS tags to control the solubility, pharmacokinetics, and phase behavior of fusion biologics.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42556189/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.jcis.2026.141211" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#PAS Peptides / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8.5/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41797001/" target="_blank">NAStructuralDB : structural database to facilitate computational studies of molecular modeling and recognition of proteins with special focus on antibody-antigen interactions</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Chomicz Dawid, Dudzic Paweł, Wrobel Sonia, Gawlowski Tomasz, Demharter Samuel, Spreafico Roberto, Minoux Hervé, Phillips Andrew &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Raw PDB data requires extensive processing, redundancy removal, and annotation of surface accessibility and contacts to be useful for machine learning.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> The authors developed NAStructuralDB, a highly curated database providing annotated antibody/nanobody structures, interface contacts, and non-antibody reference interactions.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Provides a clean, standardized dataset to train and benchmark machine learning models for paratope/epitope prediction and docking.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41797001/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2630438" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Database</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8.5/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41684328/" target="_blank">Balancing the extremes for antibody developability: hydrophobic and electrostatic germline framework signatures for CDR-loop compensation</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Spanke Vera A, Egger-Hoerschinger Valentin J, Seidler Clarissa A, Kroell Katharina B, Wieser Vincent, Imhof-Jung Sabine, Weiche Benjamin, Bujotzek Alexander &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Mutating CDR loops to fix developability issues (like aggregation or viscosity) often compromises antigen binding affinity.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> By systematically analyzing germline framework surface properties, the authors demonstrated that rational framework selection can compensate for extreme CDR physicochemical characteristics.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Offers a systematic 'framework-swapping' toolbox to optimize antibody developability without altering the antigen-binding CDR loops.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/41684328/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2627669" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Engineering</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" target="_blank">Biomolecular coacervation-mediated materials: Phase states, phase transitions, and biomedical applications</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Yang Ruifen, Hu Jiayan, Yu Lisha, Mao Zhengwei &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Harnessing liquid-liquid phase separation (LLPS) and subsequent liquid-to-solid transitions for biomaterials requires a systematic understanding of molecular driving forces and environmental regulators.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> This comprehensive review maps the phase evolution of coacervates (liquid, gel, and solid states) to their structural and mechanical properties, outlining design strategies for drug delivery and tissue engineering.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Serves as a foundational guide for protein designers looking to engineer smart, phase-separating biomaterials and responsive drug delivery systems.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.bioactmat.2026.08.029" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #d1fae5; color: #047857;">Antibodies & Targeted Binders</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8.0/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42482306/" target="_blank">Glycosylation penetrance of N-X-S/T sequons in antibody variable domains: a structural survey of 19,265 human antibody structures reassessing the histidine/glutamine suppression hypothesis</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Gaughan Christopher L &nbsp;•&nbsp; 
+        🗓️ 2026 Dec
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> De novo antibody design models generate thousands of candidates, but often overlook post-translational modification liabilities like N-linked glycosylation.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> By analyzing 19,265 PDB structures, the authors established a realistic baseline penetrance of 7.82% for N-X-S/T sequons, confirming histidine/lysine suppression while refuting glutamine as a suppressor.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Provides concrete, structurally validated rules to filter out glycosylation liabilities during the computational design of therapeutic antibodies.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42482306/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1080/19420862.2026.2703349" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Antibody Developability</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">bioRxiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 7.5/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://doi.org/10.64898/2026.09.24.754173" target="_blank">RNASeek: A Cross-Phyla Generative Foundation Model for Multipurpose RNA Modeling and Reinforcement Learning-Based Design</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Chen, S., Fernandes, N., Li, W. V., Wang, L., Jia, Z., Xiang, J. S. &nbsp;•&nbsp; 
+        🗓️ 2026-09-28
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Connecting RNA foundation models to functional sequence design has been limited by a lack of unified architectures that handle both representation and generation.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> The authors developed RNASeek, a 1.6B parameter model based on the DeepSeek architecture, and combined it with Group Relative Policy Optimization (GRPO) to design functional RNAs with optimized ribozyme cleavage and mRNA stability.
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Provides a powerful generative framework for RNA engineering, mirroring the reinforcement learning-driven design paradigms currently transforming protein design.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://doi.org/10.64898/2026.09.24.754173" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://www.biorxiv.org/content/10.64898/2026.09.24.754173.full.pdf" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#RNA Foundation Model</span>
+        
+      </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This automated digest was generated by your <strong>Protein Design SOTA Agent</strong>.</p>
+      <p>Target domains: <em>De Novo Diffusion, ProteinMPNN, TDP-43 / IDRs, Targeted Binders & AlphaFold/Boltz</em></p>
+      <p style="font-size: 11px; color: #cbd5e1; margin-top: 12px;">Saved locally at <code>/home/runner/work/protein-sota-agent/protein-sota-agent/reports/digest_2026-10-01.html</code></p>
+    </div>
+  </div>
+</body>
+</html>
