@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein Design SOTA Digest - November 07, 2026</title>
+  <style>
+    /* Client-safe resets */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100% !important;
+      background-color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 16px;
+      padding: 32px 28px;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      margin-bottom: 24px;
+    }
+    .header-badge {
+      display: inline-block;
+      background-color: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(165, 180, 252, 0.4);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    .header-title {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-sub {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .stats-bar {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .stats-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* Executive Summary Card */
+    .exec-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .exec-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+    }
+    .exec-text {
+      font-size: 14px;
+      color: #334155;
+      margin: 0 0 16px 0;
+      line-height: 1.65;
+    }
+    .trend-pill {
+      display: inline-block;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Paper Card */
+    .paper-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .spotlight {
+      border: 2px solid #818cf8;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    }
+    .badge-row {
+      margin-bottom: 12px;
+    }
+    .cat-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-right: 6px;
+    }
+    .source-badge {
+      display: inline-block;
+      background-color: #f1f5f9;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .score-badge {
+      float: right;
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+    }
+    .paper-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+    .paper-title a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .paper-title a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    .paper-meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+    .key-points {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .point-item {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .point-item:last-child {
+      margin-bottom: 0;
+    }
+    .point-label {
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .action-row {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-right: 8px;
+    }
+    .btn-primary {
+      background-color: #4f46e5;
+      color: #ffffff !important;
+    }
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .footer a {
+      color: #64748b;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-badge">🧬 SOTA RESEARCH AGENT</div>
+      <h1 class="header-title">Protein Design Daily Briefing</h1>
+      <p class="header-sub">Automated literature surveillance across arXiv, bioRxiv & PubMed</p>
+      <div class="stats-bar">
+        📅 <strong>November 07, 2026</strong> &nbsp;|&nbsp; 
+        📄 <span class="stats-highlight">12 Curated Breakthroughs</span> &nbsp;|&nbsp;
+        🎯 Focus: <em>De Novo, MPNN, Diffusion, IDRs & Binders</em>
+      </div>
+    </div>
+
+    <!-- Executive Summary -->
+    
+    <div class="exec-card">
+      <h2 class="exec-title">⚡ Today's State of the Art Snapshot</h2>
+      <p class="exec-text">Today's literature digest captured 12 high-relevance papers in protein engineering, with significant activity in IDRs, Phase Separation & Low-Complexity Regions. Key highlights include advances in generative model architectures, efficient inverse-folding adaptations, and structural characterizations of biomolecular assemblies.</p>
+      
+      <div style="margin-top: 12px;">
+        <strong style="font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Key Emerging Trends:</strong>
+        
+        <span class="trend-pill">✦ Dominant activity in IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+        <span class="trend-pill">✦ Expansion of multimodal generative protein frameworks</span>
+        
+      </div>
+      
+    </div>
+    
+
+    <!-- Paper Stream -->
+    
+    <div class="paper-card spotlight">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.07723v1" target="_blank">Static Recovery Is Not Dynamic Stability: Dynamics-Aware Benchmarking of Protein Motif Scaffolding</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Emile de Bruyn, Moritz Schäffler, Jannik Schneider, Sebastian R. Schmidt, Chanwoong Hwang, Aleena Siji, Utkarsh Upadhyay, Stefan Bauer &nbsp;•&nbsp; 
+        🗓️ 2026-11-05
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Protein motif scaffolding benchmarks assess whether generative models can build scaffolds around functionally important residues
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Their conclusions depend on which motifs are tested and which criteria define success
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> BILBY highlights three complementary axes of motif-scaffolding evaluation: target coverage, unique-solution yield, and MD-supported dynamical fidelity.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.07723v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.07723v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42753669/" target="_blank">Metal-encoded droplet longevity enables catalytic microenvironments and drives emergent adhesive properties</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Mishra Gayatri, Adole Vivek Vishwanath, Kalita Deepsikha, Pradhan Libun, Koner Debasish, Chakraborty Priyadarshi &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Liquid-liquid phase separation (LLPS) drives the formation of biomolecular condensates that regulate intracellular processes
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Beyond proteins and nucleic acids, short peptides also form protocell-like droplets that recapitulate primitive compartmentalization and catalytic microenvironments, while also offering emergent soft-matter functionality
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> This work demonstrates how a rudimentary system can form protocell-like droplets and how metal-ligand coordination modulates LLPS dynamics, offering a facile route to engineer catalytic and materials attributes within biomimetic platforms.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42753669/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.jcis.2026.141597" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" target="_blank">Engineering short-sequence elements for condensate-like assemblies by de novo design</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Zhang Di, Zhang Binyun, Zheng Cheng, Sun Wenjun, Niu Huanqing, Zhu Chenjie, Chen Yong, Liu Dong &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Biomolecular condensates form through phase separation, playing a crucial role in cellular organization and gene regulation
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> However, native condensate elements often suffer from high molecular weight and sequence redundancy, limiting their use in prokaryotic systems
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We began by constructing a benchmark dataset of eukaryotic-derived phase-separation elements in
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.synbio.2026.06.007" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Structure & Complex Prediction</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42961746/" target="_blank">Meta-Scoring Approach to Curate Synthetic RNA 3D Structures</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Bernard Clement, Justyna Marek, Postic Guillaume, Antczak Maciej, Tahi Fariza, Szachniuk Marta &nbsp;•&nbsp; 
+        🗓️ 2027
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> The structural diversity of RNA is central to molecular medicine, RNA-targeted drug discovery, and synthetic biology, where engineered RNA molecules are increasingly used in therapeutic, regulatory, and nanotechnology applications
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> While the rapid development of deep learning methods has heightened the demand for large, diverse structural datasets, high-quality RNA data remain scarce compared to protein datasets
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> This study provides both a methodological framework for generating and curating large collections of synthetic RNA 3D models under explicitly stated assumptions and a concrete dataset that supports methodological development, exploratory analyses, decoy-based applications, and selected deep learning workflows in RNA design, synthetic biology, and nanotechnology.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42961746/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1007/978-1-0716-5583-2_12" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Structure Prediction</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42946500/" target="_blank">Contribution of disordered regions of the essential protein GEMIN5 to RNA binding</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Francisco-Velilla Rosario, Nahavandi Araghi Azadeh, Ramajo Jorge, Abellan Salvador, Martinez-Salas Encarnacion &nbsp;•&nbsp; 
+        🗓️ 2027 Jan
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> GEMIN5 is emerging as a multifunctional RNA-binding protein (RBP) linked to human disease
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> This RBP comprises a WD40 repeat domain at the N terminus
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We propose that the elongated dimer forms an extended binding surface, fine-tuning the RNA binding ability of the G5C architecture.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42946500/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.26508/lsa.202603860" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Low-Complexity</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 9/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42862241/" target="_blank">In Vitro Assay of Bacterial RNA Helicases Liquid-Liquid Phase Separation</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Geiser Johan, Valentini Martina &nbsp;•&nbsp; 
+        🗓️ 2027
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> DEAD-box RNA helicases are widespread ATP-driven enzymes that reshape RNA structures and RNA-protein complexes during many steps of RNA metabolism
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> In bacteria, DEAD-box RNA helicases support cellular growth and responses to stress by contributing to ribosome biogenesis, RNA degradation, and translation initiation
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Altogether, this workflow enables systematic dissection of key physicochemical parameters governing DEAD-box helicase LLPS and provides a standardised framework for comparative studies across bacterial DEAD-box proteins or variants.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42862241/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1007/978-1-0716-5571-9_20" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.07780v1" target="_blank">Bridging Structure and Semantics: Knowledge Graph Verification via Triple-to-Text Alignment</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Ziang Cui &nbsp;•&nbsp; 
+        🗓️ 2026-11-05
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Semantic accuracy is an important dimension of knowledge graph quality
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Graph-based scoring methods exploit relational structure, while textual representations allow classifiers to draw on knowledge encoded by pre-trained language models (PLMs)
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> The experiments suggest that generated representations can help triple classification, while the case analysis also exposes semantic drift and high-confidence errors.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.07780v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.07780v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">bioRxiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://doi.org/10.64898/2026.07.06.736753" target="_blank">Protein language models learn the underlying accessibility of mutations alongside protein fitness landscapes</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ MacLean, O. A., Lamb, K., Lytras, S., Mojsiejczuk, L., Yuan, K., Hughes, J., Robertson, D. L. &nbsp;•&nbsp; 
+        🗓️ 2026-11-04
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Protein language models (PLMs) score the effects of amino acid replacements as pseudo-probabilities, which are widely utilised to map protein fitness landscapes
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> However, because their training data relies on natural amino acid sequences, these models conflate protein structural constraints with nucleotide mutation biases and codon accessibility
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Explicitly decoupling these independent evolutionary processes optimises predictive accuracy for real-world pathogen forecasting and isolates pure protein fitness for synthetic design pipelines.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://doi.org/10.64898/2026.07.06.736753" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://www.biorxiv.org/content/10.64898/2026.07.06.736753.full.pdf" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" target="_blank">Biomolecular coacervation-mediated materials: Phase states, phase transitions, and biomedical applications</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Yang Ruifen, Hu Jiayan, Yu Lisha, Mao Zhengwei &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Biomolecular coacervation is increasingly recognized as a phase-evolution process, including liquid-liquid phase separation (LLPS), resulting in metastable liquid-like states, and phase transitions that give rise to gel-like states or solid-like states
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> These coacervate phase states exhibit distinct structural, dynamic and mechanical characteristics, making biomolecular coacervation regulation a powerful design strategy to engineer biomaterials for a broad range of biomedical applications
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Hopefully, this review could provide a unified framework for understanding coacervation-mediated materials as programmable biomolecular coacervate systems and for guiding their rational design in biomedical applications.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.bioactmat.2026.08.029" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42604037/" target="_blank">Going high-throughput: Dynamic conformations and interactions</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Gong Zhou, Zhao Qun, Sun Min, Zhang Beirong, Zhang Xu, Zhang Lihua, Zhang Yukui, Liu Maili &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Proteins are intrinsically dynamic molecules that continuously explore conformational ensembles to execute biological functions
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Conventional structural biology methods rely on
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Enables improved computational throughput and accuracy.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42604037/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.mrl.2026.200306" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Low-Complexity</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42685434/" target="_blank">Scalable size- and shape-selective purification of colloidal building blocks via excluded volume interactions</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Kainz Thomas, McSweeney Isobel, Top Andrei-Micea, Bruder Nicolas, Pine David J, Dodero Andrea, Steiner Ullrich &nbsp;•&nbsp; 
+        🗓️ 2027 Jan
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Excluded-volume interactions, arising solely from steric constraints, play a crucial role in determining the structure, dynamics, and phase behaviour of colloidal suspensions
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> This is particularly important for non-spherical particles, where orientation-dependent effects also become significant
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> These findings establish excluded-volume-driven sorting as a practical and scalable route for purifying colloidal building blocks for hierarchical assembly.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42685434/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.jcis.2026.141419" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42993056/" target="_blank">Developmental elimination of electrical synapses by UNC-51/UNC-76-mediated vesicular transport</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Huang Hao, Yang Yuzhi, Xu Yuanhao, Jian Yuli, Qiu Shujie, Zhao Zihao, Yan Dong, Meng Lingfeng &nbsp;•&nbsp; 
+        🗓️ 2027 Jan
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Neural circuit maturation requires precise elimination of transient synaptic connections, but how electrical synapses are eliminated remains unknown
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Using Caenorhabditis elegans PLM mechanosensory neurons, we found that gap junctions form transiently during early development and are subsequently eliminated as the circuit matures
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> These findings establish a conserved framework for developmental elimination of functionally essential transient electrical connectivity.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42993056/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1083/jcb.202602115" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This automated digest was generated by your <strong>Protein Design SOTA Agent</strong>.</p>
+      <p>Target domains: <em>De Novo Diffusion, ProteinMPNN, TDP-43 / IDRs, Targeted Binders & AlphaFold/Boltz</em></p>
+      <p style="font-size: 11px; color: #cbd5e1; margin-top: 12px;">Saved locally at <code>/home/runner/work/protein-sota-agent/protein-sota-agent/reports/digest_2026-11-07.html</code></p>
+    </div>
+  </div>
+</body>
+</html>
