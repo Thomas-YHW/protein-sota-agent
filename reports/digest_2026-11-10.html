@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein Design SOTA Digest - November 10, 2026</title>
+  <style>
+    /* Client-safe resets */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100% !important;
+      background-color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 16px;
+      padding: 32px 28px;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      margin-bottom: 24px;
+    }
+    .header-badge {
+      display: inline-block;
+      background-color: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(165, 180, 252, 0.4);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    .header-title {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-sub {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .stats-bar {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .stats-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* Executive Summary Card */
+    .exec-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #6366f1;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .exec-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+    }
+    .exec-text {
+      font-size: 14px;
+      color: #334155;
+      margin: 0 0 16px 0;
+      line-height: 1.65;
+    }
+    .trend-pill {
+      display: inline-block;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Paper Card */
+    .paper-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .spotlight {
+      border: 2px solid #818cf8;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    }
+    .badge-row {
+      margin-bottom: 12px;
+    }
+    .cat-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-right: 6px;
+    }
+    .source-badge {
+      display: inline-block;
+      background-color: #f1f5f9;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .score-badge {
+      float: right;
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+    }
+    .paper-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+    .paper-title a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .paper-title a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    .paper-meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+    .key-points {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .point-item {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .point-item:last-child {
+      margin-bottom: 0;
+    }
+    .point-label {
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .action-row {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-right: 8px;
+    }
+    .btn-primary {
+      background-color: #4f46e5;
+      color: #ffffff !important;
+    }
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .footer a {
+      color: #64748b;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-badge">🧬 SOTA RESEARCH AGENT</div>
+      <h1 class="header-title">Protein Design Daily Briefing</h1>
+      <p class="header-sub">Automated literature surveillance across arXiv, bioRxiv & PubMed</p>
+      <div class="stats-bar">
+        📅 <strong>November 10, 2026</strong> &nbsp;|&nbsp; 
+        📄 <span class="stats-highlight">12 Curated Breakthroughs</span> &nbsp;|&nbsp;
+        🎯 Focus: <em>De Novo, MPNN, Diffusion, IDRs & Binders</em>
+      </div>
+    </div>
+
+    <!-- Executive Summary -->
+    
+    <div class="exec-card">
+      <h2 class="exec-title">⚡ Today's State of the Art Snapshot</h2>
+      <p class="exec-text">Today's literature digest captured 12 high-relevance papers in protein engineering, with significant activity in IDRs, Phase Separation & Low-Complexity Regions. Key highlights include advances in generative model architectures, efficient inverse-folding adaptations, and structural characterizations of biomolecular assemblies.</p>
+      
+      <div style="margin-top: 12px;">
+        <strong style="font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Key Emerging Trends:</strong>
+        
+        <span class="trend-pill">✦ Dominant activity in IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+        <span class="trend-pill">✦ Expansion of multimodal generative protein frameworks</span>
+        
+      </div>
+      
+    </div>
+    
+
+    <!-- Paper Stream -->
+    
+    <div class="paper-card spotlight">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42753669/" target="_blank">Metal-encoded droplet longevity enables catalytic microenvironments and drives emergent adhesive properties</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Mishra Gayatri, Adole Vivek Vishwanath, Kalita Deepsikha, Pradhan Libun, Koner Debasish, Chakraborty Priyadarshi &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Liquid-liquid phase separation (LLPS) drives the formation of biomolecular condensates that regulate intracellular processes
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Beyond proteins and nucleic acids, short peptides also form protocell-like droplets that recapitulate primitive compartmentalization and catalytic microenvironments, while also offering emergent soft-matter functionality
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> This work demonstrates how a rudimentary system can form protocell-like droplets and how metal-ligand coordination modulates LLPS dynamics, offering a facile route to engineer catalytic and materials attributes within biomimetic platforms.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42753669/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.jcis.2026.141597" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" target="_blank">Engineering short-sequence elements for condensate-like assemblies by de novo design</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Zhang Di, Zhang Binyun, Zheng Cheng, Sun Wenjun, Niu Huanqing, Zhu Chenjie, Chen Yong, Liu Dong &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Biomolecular condensates form through phase separation, playing a crucial role in cellular organization and gene regulation
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> However, native condensate elements often suffer from high molecular weight and sequence redundancy, limiting their use in prokaryotic systems
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We began by constructing a benchmark dataset of eukaryotic-derived phase-separation elements in
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42502839/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.synbio.2026.06.007" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Structure & Complex Prediction</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42961746/" target="_blank">Meta-Scoring Approach to Curate Synthetic RNA 3D Structures</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Bernard Clement, Justyna Marek, Postic Guillaume, Antczak Maciej, Tahi Fariza, Szachniuk Marta &nbsp;•&nbsp; 
+        🗓️ 2027
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> The structural diversity of RNA is central to molecular medicine, RNA-targeted drug discovery, and synthetic biology, where engineered RNA molecules are increasingly used in therapeutic, regulatory, and nanotechnology applications
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> While the rapid development of deep learning methods has heightened the demand for large, diverse structural datasets, high-quality RNA data remain scarce compared to protein datasets
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> This study provides both a methodological framework for generating and curating large collections of synthetic RNA 3D models under explicitly stated assumptions and a concrete dataset that supports methodological development, exploratory analyses, decoy-based applications, and selected deep learning workflows in RNA design, synthetic biology, and nanotechnology.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42961746/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1007/978-1-0716-5583-2_12" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Structure Prediction</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 10/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42946500/" target="_blank">Contribution of disordered regions of the essential protein GEMIN5 to RNA binding</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Francisco-Velilla Rosario, Nahavandi Araghi Azadeh, Ramajo Jorge, Abellan Salvador, Martinez-Salas Encarnacion &nbsp;•&nbsp; 
+        🗓️ 2027 Jan
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> GEMIN5 is emerging as a multifunctional RNA-binding protein (RBP) linked to human disease
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> This RBP comprises a WD40 repeat domain at the N terminus
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We propose that the elongated dimer forms an extended binding surface, fine-tuning the RNA binding ability of the G5C architecture.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42946500/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.26508/lsa.202603860" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Low-Complexity</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.12000v1" target="_blank">HyPLM Technical Report</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Haowei Lin, Cai Zhou, Xiangxin Zhou &nbsp;•&nbsp; 
+        🗓️ 2026-11-09
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Protein language models (PLMs) are standard tools for variant-effect prediction, protein annotation and design, but the compute needed to train and serve them keeps growing
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> We present HyPLM-Flash, an efficient and open PLM trained by Hyra 2.0, the research agent developed by our team
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We have released the model weights and the inference engine at https://github.com/Tencent-Hunyuan/hyra-results/tree/main.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.12000v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.12000v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #e0f2fe; color: #0369a1;">Inverse Folding & Sequence Design</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.11997v1" target="_blank">HyInv Technical Report</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Haowei Lin, Cai Zhou, Xiangxin Zhou &nbsp;•&nbsp; 
+        🗓️ 2026-11-09
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Inverse folding designs amino-acid sequences for a given protein backbone, and screening needs many candidates that are both diverse and well folded
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> We present HyInv, a 1.96-million-parameter backbone-conditioned graph network with an encoder-decoder architecture, trained by Hyra 2.0, the research agent developed by our team: pretrained with random-order autoregressive sequence modeling, followed by structure-reward reinforcement learning
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> We have released our code and model at https://github.com/Tencent-Hunyuan/Hyra-results/tree/main/AI4Science/hyinv.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.11997v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.11997v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#MPNN / Sequence</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.11958v1" target="_blank">OriDynamics: Towards a World Model for Biomolecular Dynamics</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Jiahao Yang, Dong Liu, Hongliang Li, Ji Chen, Yuehua Liu, Daoyun Ding, Duo An, Jun Li &nbsp;•&nbsp; 
+        🗓️ 2026-11-09
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Biomolecular recognition and regulation depend on atomic interactions that change as molecular partners fluctuate and adopt alternative conformations
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Modeling these processes requires ensembles that capture both conformational diversity and coordinated atomic fluctuations between interacting molecules
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> These capabilities provide a foundation for a biomolecular world model that represents accessible molecular states and their dependence on interaction context.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.11958v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.11958v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Low-Complexity</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">arXiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://arxiv.org/abs/2611.11017v1" target="_blank">ProtLink: Sequence and Multispecies Graph Context for Protein Interaction Prediction</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Xingyuan Zhang &nbsp;•&nbsp; 
+        🗓️ 2026-11-07
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Predicting protein-protein interactions (PPIs) from sequence alone is difficult, while known interaction networks may provide informative biological context
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> We introduce ProtLink, a sequence-conditioned graph-learning framework that combines frozen ESM-2 representations with protein interaction topology and orthogroup-mediated connections between species
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> These results identify the value, depth dependence, and limits of evolutionary graph context while distinguishing prediction of held-out edges from generalization to held-out proteins.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://arxiv.org/abs/2611.11017v1" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://arxiv.org/pdf/2611.11017v1" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #f3e8ff; color: #6b21a8;">Protein Language Models & Embeddings</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">bioRxiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://doi.org/10.1101/2025.09.28.679103" target="_blank">Zero-Shot Protein-Ligand Binding Site Prediction from Protein Sequence and SMILES</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Pourmirzaei, M., Alqarghuli, S., Chen, K., Pourmirzaei, M., Xu, D. &nbsp;•&nbsp; 
+        🗓️ 2026-11-07
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Accurate identification of protein-ligand binding sites is critical for mechanistic biology and drug discovery, yet predictive performance varies substantially across ligand families and data-availability regimes
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> We present a systematic ligand-aware benchmark and evaluation framework for residue-level binding-site prediction across three settings: overrepresented ligands with abundant examples, underrepresented ligands with limited examples, and zero-shot ligands unseen during training
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Overall, this study provides a systematic benchmark for quantifying the effect of ligand data availability on residue-level binding-site prediction and for evaluating generalization to previously unseen ligands.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://doi.org/10.1101/2025.09.28.679103" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://www.biorxiv.org/content/10.1101/2025.09.28.679103.full.pdf" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#pLM / Embeddings</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">bioRxiv</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://doi.org/10.1101/2024.04.08.588540" target="_blank">Glycolytic enzymes form membrane-less condensates in the malaria parasite Plasmodium falciparum by sensing glucose levels</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Ishii, R., Sakura, T., Inaoka, D. K., Tokumasu, F. &nbsp;•&nbsp; 
+        🗓️ 2026-11-07
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Recent studies have shown that liquid-liquid phase separation (LLPS) in cells can regulate essential cellular events, including metabolic processes
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Glycolytic bodies (G-bodies) are biomolecular condensates formed through the LLPS of glycolytic enzymes, and they accelerate glycolysis to overcome hypoxic stress in several organisms
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> These results suggest that the formation of glycolytic enzyme condensates may be an enzyme-specific cellular response that helps the parasite adapt to reductions in blood glucose levels in the host during the ABS.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://doi.org/10.1101/2024.04.08.588540" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://www.biorxiv.org/content/10.1101/2024.04.08.588540.full.pdf" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" target="_blank">Biomolecular coacervation-mediated materials: Phase states, phase transitions, and biomedical applications</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Yang Ruifen, Hu Jiayan, Yu Lisha, Mao Zhengwei &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Biomolecular coacervation is increasingly recognized as a phase-evolution process, including liquid-liquid phase separation (LLPS), resulting in metastable liquid-like states, and phase transitions that give rise to gel-like states or solid-like states
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> These coacervate phase states exhibit distinct structural, dynamic and mechanical characteristics, making biomolecular coacervation regulation a powerful design strategy to engineer biomaterials for a broad range of biomedical applications
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Hopefully, this review could provide a unified framework for understanding coacervation-mediated materials as programmable biomolecular coacervate systems and for guiding their rational design in biomedical applications.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42729408/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.bioactmat.2026.08.029" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#Phase Separation / LLPS</span>
+        
+      </div>
+    </div>
+    
+    <div class="paper-card ">
+      <div class="badge-row">
+        <!-- Category Pill -->
+        
+        <span class="cat-badge" style="background-color: #fef3c7; color: #b45309;">IDRs, Phase Separation & Low-Complexity Regions</span>
+        
+
+        <!-- Source Pill -->
+        <span class="source-badge">PubMed</span>
+
+        <!-- Relevance Score Pill -->
+        <span class="score-badge">★ 8/10 SOTA</span>
+      </div>
+
+      <h3 class="paper-title">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42604037/" target="_blank">Going high-throughput: Dynamic conformations and interactions</a>
+      </h3>
+
+      <div class="paper-meta">
+        ✍️ Gong Zhou, Zhao Qun, Sun Min, Zhang Beirong, Zhang Xu, Zhang Lihua, Zhang Yukui, Liu Maili &nbsp;•&nbsp; 
+        🗓️ 2027 Feb
+      </div>
+
+      <!-- Structured Breakdown -->
+      <div class="key-points">
+        
+        <div class="point-item">
+          <span class="point-label">🎯 Bottleneck:</span> Proteins are intrinsically dynamic molecules that continuously explore conformational ensembles to execute biological functions
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">⚡ Innovation:</span> Conventional structural biology methods rely on
+        </div>
+        
+        
+        <div class="point-item">
+          <span class="point-label">🚀 Design Impact:</span> Enables improved computational throughput and accuracy.
+        </div>
+        
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42604037/" class="btn btn-primary" target="_blank">View Paper ↗</a>
+        
+        <a href="https://doi.org/10.1016/j.mrl.2026.200306" class="btn btn-secondary" target="_blank">PDF ↗</a>
+        
+        
+        <span style="float: right; font-size: 11px; color: #94a3b8; line-height: 28px;">#IDRs / Low-Complexity</span>
+        
+      </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This automated digest was generated by your <strong>Protein Design SOTA Agent</strong>.</p>
+      <p>Target domains: <em>De Novo Diffusion, ProteinMPNN, TDP-43 / IDRs, Targeted Binders & AlphaFold/Boltz</em></p>
+      <p style="font-size: 11px; color: #cbd5e1; margin-top: 12px;">Saved locally at <code>/home/runner/work/protein-sota-agent/protein-sota-agent/reports/digest_2026-11-10.html</code></p>
+    </div>
+  </div>
+</body>
+</html>
